@@ -7,9 +7,12 @@
 #    http://shiny.rstudio.com/
 #
 
+
+
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(maps)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
