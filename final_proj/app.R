@@ -42,6 +42,12 @@ server <- function(input, output) {
         
         
     })
+    output$message <- renderText ({
+        high_race <- by_race %>%
+            filter(gender == input$gender) %>%
+            arrange(desc(shootings))
+        paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
+    })
     
 }
 
@@ -56,14 +62,16 @@ ui <- fluidPage(
         sidebarPanel(
             uiOutput("gender"), 
             selectInput(inputId = "gender", "Gender:", 
-                        c("F", "M")), 
+                        c("Female" = "F", 
+                          "Male" = "M")), 
             radioButtons(inputId = "Color", label = "Plot Color", 
                          c("Red", "Blue", "Gray", "Black"), 
                          selected = "Black"
             )
         ),
         mainPanel(
-            plotOutput("race_bar") 
+            plotOutput("race_bar"), 
+            textOutput("message")
             
         )
         
