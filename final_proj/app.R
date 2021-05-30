@@ -14,41 +14,69 @@ library(dplyr)
 library(ggplot2)
 library(maps)
 
+server <- function(input, output) {
+    data <- read.csv("fatal-police-shootings-data.csv") 
+    
+    
+    by_race <- data %>%
+        group_by(race, gender) %>%
+        summarise(shootings = n()) 
+    
+    gender_name <- reactive({
+        if(is.null(input$gender)) {
+            by_race
+        }  else {
+            by_race %>%
+                filter(gender %in% input$gender) 
+        }
+        
+    }) 
+    output$race_bar <- renderPlot({
+        ggplot(gender_name(), aes(race, shootings )) +
+            geom_col(col = "Black", fill = input$Color) +
+            labs (
+                x = "Race", 
+                y = "Number of Shootings", 
+                title = "Number of Shootings by Race and Gender") +
+            theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5))
+        
+        
+    })
+    output$message <- renderText ({
+        high_race <- by_race %>%
+            filter(gender == input$gender) %>%
+            arrange(desc(shootings))
+        paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
+    })
+    
+}
+
+
+library(shiny)
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
+    titlePanel("Police Shootings in the USA Data"),
+    
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            uiOutput("gender"), 
+            selectInput(inputId = "gender", "Gender:", 
+                        c("Female" = "F", 
+                          "Male" = "M")), 
+            radioButtons(inputId = "Color", label = "Plot Color", 
+                         c("Red", "Blue", "Gray", "Black"), 
+                         selected = "Black"
+            )
         ),
-
-        # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+            plotOutput("race_bar"), 
+            textOutput("message")
+            
         )
+        
     )
 )
-
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    })
-}
 
 # Run the application 
 shinyApp(ui = ui, server = server)
