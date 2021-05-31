@@ -50,8 +50,6 @@ server <- function(input, output) {
 }
 
 
-library(shiny)
-
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     titlePanel("Police Shootings in the USA Data"),
