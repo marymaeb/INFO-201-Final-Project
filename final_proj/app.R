@@ -10,8 +10,17 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(maps)
 
+# load data
 shoot <- read.csv("fatal-police-shootings-data.csv")
+## provide reference to this data 
+fips_data <- read.csv("https://raw.githubusercontent.com/kjhealy/fips-codes/master/state_fips_master.csv")
+
+# manipulate data 
+shoot_map <- shoot %>% select(id, armed, state, signs_of_mental_illness)
+fips_data <- fips_data %>% select(state_abbr, fips)
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
