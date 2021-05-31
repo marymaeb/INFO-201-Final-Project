@@ -11,6 +11,8 @@ library(shiny)
 library(dplyr)
 library(ggplot2)
 
+shoot <- read.csv("fatal-police-shootings-data.csv")
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
