@@ -108,7 +108,6 @@ ui <- fluidPage(
             textOutput("message")
             
         )
-        
     )
 )
 
