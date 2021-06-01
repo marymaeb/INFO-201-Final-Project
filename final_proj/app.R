@@ -10,6 +10,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(tidyverse)
 library(maps)
 
 # load data
@@ -17,9 +18,29 @@ shoot <- read.csv("fatal-police-shootings-data.csv")
 ## provide reference to this data 
 fips_data <- read.csv("https://raw.githubusercontent.com/kjhealy/fips-codes/master/state_fips_master.csv")
 
+state_abb_data <- read.csv("https://raw.githubusercontent.com/jasonong/List-of-US-States/master/states.csv")
+state_abb_data$State <- tolower(state_abb_data$State)
+
 # manipulate data 
-shoot_map <- shoot %>% select(id, armed, state, signs_of_mental_illness)
+shoot_map_data <- shoot %>% 
+    select(id, armed, state, signs_of_mental_illness)
+# add fips data to shooting data 
 fips_data <- fips_data %>% select(state_abbr, fips)
+shoot_map_data <- left_join(shoot_map_data, fips_data, by = c("state" = "state_abbr"))
+
+
+
+# create state data 
+state_shapes <- map_data("state")
+state_shapes <- left_join(state_shapes, state_abb_data, by = c("region" = "State"))
+
+# attach state data to shooting data 
+shoot_map <- left_join(state_shapes, shoot_map_data, by = c("Abbreviation" = "state"))
+
+# plot map 
+shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
+    geom_polygon() + coord_quickmap()
+
 
 server <- function(input, output) {
     data <- read.csv("fatal-police-shootings-data.csv") 
