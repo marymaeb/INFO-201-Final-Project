@@ -24,6 +24,11 @@ state_abb_data$State <- tolower(state_abb_data$State)
 # manipulate data 
 shoot_map_data <- shoot %>% 
     select(id, armed, state, signs_of_mental_illness)
+
+shoot_count <- shoot_map %>% 
+    group_by(Abbreviation) %>% 
+    summarize(count = n())
+
 # add fips data to shooting data 
 fips_data <- fips_data %>% select(state_abbr, fips)
 shoot_map_data <- left_join(shoot_map_data, fips_data, by = c("state" = "state_abbr"))
@@ -36,11 +41,18 @@ state_shapes <- left_join(state_shapes, state_abb_data, by = c("region" = "State
 
 # attach state data to shooting data 
 shoot_map <- left_join(state_shapes, shoot_map_data, by = c("Abbreviation" = "state"))
+# attach counts to shooting and map data 
+shoot_map <- left_join(shoot_map, shoot_count, by = "Abbreviation")
 
 # plot map 
 shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
-    geom_polygon() + coord_quickmap()
+    geom_polygon(aes(fill = count)) + coord_quickmap() + 
+    labs(
+        title = "Count of Fatal Police Shootings by US State"
+    )
+    
 
+shoot_map_plot
 
 
 # Define UI for application that draws a histogram
