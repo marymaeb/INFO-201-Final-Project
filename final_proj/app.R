@@ -83,7 +83,7 @@ server <- function(input, output) {
         paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
     })
     
-###Amy add output$map for your map & reactive function 
+
     
 }
 
