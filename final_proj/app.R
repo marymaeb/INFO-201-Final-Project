@@ -28,7 +28,7 @@ state_abb_data$State <- tolower(state_abb_data$State)
 shoot_map_data <- data %>% 
     select(id, armed, state, signs_of_mental_illness)
 ## create counts of shootings by state 
-shoot_count <- shoot_map %>% 
+shoot_count <- shoot_map_data %>% 
     group_by(Abbreviation) %>% 
     summarize(count = n())
 
@@ -82,6 +82,8 @@ server <- function(input, output) {
             arrange(desc(shootings))
         paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
     })
+    
+###Amy add output$map for your map & reactive function 
     
 }
 
