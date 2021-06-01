@@ -51,43 +51,41 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
         title = "Count of Fatal Police Shootings by US State"
     )
     
-
 shoot_map_plot
 
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    #titlePanel("Old Faithful Geyser Data"),
 
     # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
+   # sidebarLayout(
+        #sidebarPanel(
+            #sliderInput("bins",
+                        #"Number of bins:",
+                        #min = 1,
+                        #max = 50,
+                        #value = 30)
+        #),
 
         # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+        #mainPanel(
+           
+        #)
+    #)
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    output$map <- renderPlot({
+        #subset <- shoot_map %>%
+            #filter(Characteristic %in% input$char)
+        shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
+            geom_polygon(aes(fill = count)) + coord_quickmap() + 
+            labs(
+                title = "Count of Fatal Police Shootings by US State"
+            )
     })
 }
 
