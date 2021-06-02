@@ -10,16 +10,75 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(tidyverse)
 library(maps)
 
+data <- read.csv("fatal-police-shootings-data.csv")
+by_race <- data %>%
+    group_by(race, gender) %>%
+    summarise(shootings = n()) 
+
+# create map of shooting counts 
+## load data
+fips_data <- read.csv("https://raw.githubusercontent.com/kjhealy/fips-codes/master/state_fips_master.csv")
+state_abb_data <- read.csv("https://raw.githubusercontent.com/jasonong/List-of-US-States/master/states.csv")
+state_abb_data$State <- tolower(state_abb_data$State)
+
+## manipulate data 
+shoot_map_data <- data %>% 
+    select(id, armed, state, signs_of_mental_illness)
+## create counts of shootings by state 
+shoot_count <- shoot_map %>% 
+    group_by(Abbreviation) %>% 
+    summarize(count = n())
+armed_count <- shoot_map %>% 
+    group_by(armed) %>% 
+    summarize(count = n()) %>% arrange(desc(count))
+armed_count <- armed_count[-4,]
+## reduce to top ten 
+armed_count <- armed_count[1:10,]
+
+## add fips data to shooting data 
+fips_data <- fips_data %>% select(state_abbr, fips)
+shoot_map_data <- left_join(shoot_map_data, fips_data, by = c("state" = "state_abbr"))
+
+## add fips data to shooting data 
+fips_data <- fips_data %>% select(state_abbr, fips)
+shoot_map_data <- left_join(shoot_map_data, fips_data, by = c("state" = "state_abbr"))
+
+## create state data 
+state_shapes <- map_data("state")
+state_shapes <- left_join(state_shapes, state_abb_data, by = c("region" = "State"))
+
+## attach state data to shooting data 
+shoot_map <- left_join(state_shapes, shoot_map_data, by = c("Abbreviation" = "state"))
+## attach counts to shooting and map data 
+shoot_map <- left_join(shoot_map, shoot_count, by = "Abbreviation")
+shoot_map <- shoot_map %>% 
+    rename(
+        state_count = count
+    )
+## attach armed counts to shooting map 
+shoot_map <- left_join(shoot_map, armed_count, by = "armed")
+shoot_map <- shoot_map %>% 
+    rename(
+        armed_count = count
+    )
+
+## plot map 
+shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
+    geom_polygon(aes(fill = count)) + coord_quickmap() + 
+    labs(
+        title = "Count of Fatal Police Shootings by US State"
+    )
+
+
+
+
+
+
+
 server <- function(input, output) {
-    data <- read.csv("fatal-police-shootings-data.csv") 
-    
-    
-    by_race <- data %>%
-        group_by(race, gender) %>%
-        summarise(shootings = n()) 
-    
     gender_name <- reactive({
         if(is.null(input$gender)) {
             by_race
@@ -27,7 +86,6 @@ server <- function(input, output) {
             by_race %>%
                 filter(gender %in% input$gender) 
         }
-        
     }) 
     output$race_bar <- renderPlot({
         ggplot(gender_name(), aes(race, shootings )) +
@@ -37,25 +95,45 @@ server <- function(input, output) {
                 y = "Number of Shootings", 
                 title = "Number of Shootings by Race and Gender") +
             theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5))
-        
-        
     })
     output$message <- renderText ({
         high_race <- by_race %>%
             filter(gender == input$gender) %>%
             arrange(desc(shootings))
-        paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
+        paste0("The race" ,  high_race$race[1]  ,  "and the gender"  ,  input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ") 
+
+    })
+    
+    output$descripation_one <- renderText({
+        print("This bar graph helps us look at the disparities of fatal police shootings among race. The user 
+          can then adjust it to further look at the differences between different races and different genders.")
+    })
+    
+    output$map <- renderPlot({
+        #subset <- shoot_map %>% 
+            #filter(count)
+        shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
+            geom_polygon(aes(fill = count)) + coord_quickmap() + 
+            labs(
+                title = "Count of Fatal Police Shootings by US State"
+            )
     })
     
 }
+output$mannerBar <- renderPlot({
+    subset<- data %>%
+        filter(gender %in% input$gender)
+    ggplot(data= subset, aes(x= manner_of_death, fill= ))+ 
+        geom_bar() + labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
+})
 
 
-library(shiny)
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     titlePanel("Police Shootings in the USA Data"),
-    
+
     sidebarLayout(
         sidebarPanel(
             uiOutput("gender"), 
@@ -66,85 +144,50 @@ ui <- fluidPage(
                          c("Red", "Blue", "Gray", "Black"), 
                          selected = "Black"
             )
+           # selectInput("armed", "weapon", choices = unique(shoot_map$armed))
         ),
         mainPanel(
             plotOutput("race_bar"), 
-            textOutput("message")
+            textOutput("message"),
+            textOutput("descripation_one"),
+            plotOutput("map")
             
         )
-        
     )
 )
+# Application title
+titlePanel("Manner of Death")
 
-# Run the application 
-shinyApp(ui = ui, server = server)
-
-
-
-
-
-# Bar Graph for the "Manner of Death"
-library(shiny)
-library(ggplot2)
-library(dplyr)
-
-
-by_manner <- data %>%
-    group_by(manner_of_death, gender) %>%
-    summarise(occurance = n())
-
-
-
-
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-    
-    # Application title
-    titlePanel("Manner of Death"),
-    
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            selectInput('var',
-                        label= "Select Gender",
-                        choices = list("Female"= "FM",
-                                       "Male"= "M"))),
+# Sidebar with a slider input for number of bins 
+sidebarLayout(
+    sidebarPanel(
+        selectInput("gender","gender", 
+                    label= "Select Gender",
+                    choices = list("Female"= "F",
+                                   "Male"= "M")),
         radioButtons(inputId = "Color", label = "Plot Color", 
                      c("Red"), 
-                     selected = "Red"),
-                       
-        
-        
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("mannerBar")
-        )
+                     selected = "Red")),
+    
+    
+    
+    # Show a plot of the generated distribution
+    mainPanel(
+        plotOutput("mannerBar")
     )
 )
 
-# Define server logic required to draw a histogram
-server <- function(input, output) 
-    gender_name <- reactive({
-        if(is.null(input$gender)) {
-            by_race
-        }  else {
-            by_race %>%
-                filter(gender %in% input$gender) }
-        
-        })
-  
-     output$mannerBar <- renderPlot ({
-         ggplot(gender_name, aes(manner_of_death, ocurrances))+ 
-             geom_col(col= "Red", fill = input$Color) +
-             labs(
-                 x= "Mannner Of Death",
-                 y= "Ocurrances",
-                 title= "Bar Graph of Manner of Death"
-             )
-     })
-
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+
+
+
+
+
+
+
+
 
 
 
