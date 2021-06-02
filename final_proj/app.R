@@ -144,19 +144,24 @@ server <- function(input, output) {
               We allow the user to switch between different things the person was armed (or not armed with) this showed a pattern that 
               a high majority of people who were shot were actually not armed. This number is alarming with ", armed_count$count[3], 
               " people being unarmed while they were fatally shot by the police. This shows that many police error on the side of caution
-              and fear when shooting at citzens, which can be very problematic when it entails taking a human life. In our next page, we showed 
-              a bar graph that showed the number of fatal shootings spiliting up by race. This showed us that in this data, the most people
+              and fear when shooting at citzens, which can be very problematic when it entails taking a human life.")
+        br()
+        print("In our next page, we showed a bar graph that showed the number of fatal shootings spiliting up by race. This showed us that in this data, the most people
               being shot were the ", by_race_high$race[1], " race and ", by_race_high$gender[1], " gender with ", by_race_high$shootings[1], 
               " shootings. This number is closely followed by Black Males with ", by_race_high$shootings[2], " shootings. This shows us
               that Males are being shot more than females and in this particular data White Males more than Blakc Males. In our last page we 
-              created a bar graph that depicted that manner of death. ADD ASHLEY DATA!!!! All of this data is very important because it 
-              allows us to investigate the Police force and think about the manner of fatal shootings. Are they always justified? With these 
+              created a bar graph that depicted that manner of death.")
+        br()
+        print("ADD ASHLEY DATA!!!! All of this data is very important because it allows us to investigate the Police force and think about the manner of fatal shootings. Are they always justified? With these 
               numbers we can see that although more people are armed than unarmed, there is still an alarming number of unarmed 
               individuals being shot. Furthermore we can start investigating deeper questions such as, who gets to decides if a person 
-              lives or dies? Should the Police person have the ability to be the judge, jury and executor? This data as a whole I believe was
-              faliry unbiased. It was giving numbers and statistics which were not pulled out of thin air. The major issue that we had with this 
+              lives or dies? Should the Police person have the ability to be the judge, jury and executor?")
+        br()
+        print("This data as a whole I believe was aliry unbiased. It was giving numbers and statistics which were not pulled out of thin air. The major issue that we had with this 
               data is that there were many catergories that did not have a variable in the box, like empty parts in the data. This made it 
-              a little more diffcult when we constructed charts. What's next with this project? Investigate another data set that shows 
+              a little more diffcult when we constructed charts.")
+        br()
+        print("What's next with this project? Investigate another data set that shows 
               fatal Police shooting but during a different time period. We could compare and contrast the data and look how fatal Police shootings
               have changed over time." )
             
