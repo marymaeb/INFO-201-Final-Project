@@ -72,12 +72,6 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
         title = "Count of Fatal Police Shootings by US State"
     )
 
-
-
-
-
-
-
 server <- function(input, output) {
     gender_name <- reactive({
         if(is.null(input$gender)) {
@@ -100,7 +94,7 @@ server <- function(input, output) {
         high_race <- by_race %>%
             filter(gender == input$gender) %>%
             arrange(desc(shootings))
-        paste0("The race" ,  high_race$race[1]  ,  "and the gender"  ,  input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ") 
+        paste0("The race ",  high_race$race[1],  " and the gender ",  input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ") 
 
     })
     
@@ -108,7 +102,7 @@ server <- function(input, output) {
         print("This bar graph helps us look at the disparities of fatal police shootings among race. The user 
           can then adjust it to further look at the differences between different races and different genders.")
     })
-    
+ 
     output$map <- renderPlot({
         #subset <- shoot_map %>% 
             #filter(count)
