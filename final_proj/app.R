@@ -28,7 +28,7 @@ state_abb_data$State <- tolower(state_abb_data$State)
 shoot_map_data <- data %>% 
     select(id, armed, state, signs_of_mental_illness)
 ## create counts of shootings by state 
-shoot_count <- shoot_map_data %>% 
+shoot_count <- shoot_map %>% 
     group_by(Abbreviation) %>% 
     summarize(count = n())
 
