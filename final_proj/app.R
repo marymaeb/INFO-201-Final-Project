@@ -80,3 +80,71 @@ ui <- fluidPage(
 shinyApp(ui = ui, server = server)
 
 
+
+
+
+# Bar Graph for the "Manner of Death"
+library(shiny)
+library(ggplot2)
+library(dplyr)
+
+
+by_manner <- data %>%
+    group_by(manner_of_death, gender) %>%
+    summarise(occurance = n())
+
+
+
+
+# Define UI for application that draws a histogram
+ui <- fluidPage(
+    
+    # Application title
+    titlePanel("Manner of Death"),
+    
+    # Sidebar with a slider input for number of bins 
+    sidebarLayout(
+        sidebarPanel(
+            selectInput('var',
+                        label= "Select Gender",
+                        choices = list("Female"= "FM",
+                                       "Male"= "M"))),
+        radioButtons(inputId = "Color", label = "Plot Color", 
+                     c("Red"), 
+                     selected = "Red"),
+                       
+        
+        
+        # Show a plot of the generated distribution
+        mainPanel(
+            plotOutput("mannerBar")
+        )
+    )
+)
+
+# Define server logic required to draw a histogram
+server <- function(input, output) 
+    gender_name <- reactive({
+        if(is.null(input$gender)) {
+            by_race
+        }  else {
+            by_race %>%
+                filter(gender %in% input$gender) }
+        
+        })
+  
+     output$mannerBar <- renderPlot ({
+         ggplot(gender_name, aes(manner_of_death, ocurrances))+ 
+             geom_col(col= "Red", fill = input$Color) +
+             labs(
+                 x= "Mannner Of Death",
+                 y= "Ocurrances",
+                 title= "Bar Graph of Manner of Death"
+             )
+     })
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+
+
+
