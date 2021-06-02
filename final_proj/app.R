@@ -112,7 +112,8 @@ server <- function(input, output) {
   
     output$descripation_one <- renderText({
         print("This bar graph helps us look at the disparities of fatal police shootings among race. The user 
-          can then adjust it to further look at the differences between different races and different genders.")
+          can then adjust it to further look at the differences between different races and different genders. This allows us to 
+              understand and look at the patterns of who is being fatally shot most by police.")
     })
 ##################End Mary-Mae Page
  ##AmyPage
@@ -172,10 +173,10 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             uiOutput("gender"), 
-            selectInput(inputId = "gender", "Gender:", 
+            selectInput(inputId = "gender", "Select Gender:", 
                         c("Female" = "F", 
                           "Male" = "M")), 
-            radioButtons(inputId = "Color", label = "Plot Color", 
+            radioButtons(inputId = "Color", label = "Select Bar Color", 
                          c("Red", "Blue", "Gray", "Black"), 
                          selected = "Black"
             ), 
