@@ -31,6 +31,12 @@ shoot_map_data <- data %>%
 shoot_count <- shoot_map %>% 
     group_by(Abbreviation) %>% 
     summarize(count = n())
+armed_count <- shoot_map %>% 
+    group_by(armed) %>% 
+    summarize(count = n()) %>% arrange(desc(count))
+armed_count <- armed_count[-4,]
+## reduce to top ten 
+armed_count <- armed_count[1:10,]
 
 ## add fips data to shooting data 
 fips_data <- fips_data %>% select(state_abbr, fips)
@@ -48,6 +54,16 @@ state_shapes <- left_join(state_shapes, state_abb_data, by = c("region" = "State
 shoot_map <- left_join(state_shapes, shoot_map_data, by = c("Abbreviation" = "state"))
 ## attach counts to shooting and map data 
 shoot_map <- left_join(shoot_map, shoot_count, by = "Abbreviation")
+shoot_map <- shoot_map %>% 
+    rename(
+        state_count = count
+    )
+## attach armed counts to shooting map 
+shoot_map <- left_join(shoot_map, armed_count, by = "armed")
+shoot_map <- shoot_map %>% 
+    rename(
+        armed_count = count
+    )
 
 ## plot map 
 shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
@@ -55,8 +71,12 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
     labs(
         title = "Count of Fatal Police Shootings by US State"
     )
-    
-shoot_map_plot
+
+
+
+
+
+
 
 server <- function(input, output) {
     gender_name <- reactive({
@@ -83,14 +103,22 @@ server <- function(input, output) {
         paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
     })
     
-
+    output$map <- renderPlot({
+        #subset <- shoot_map %>% 
+            #filter(count)
+        shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
+            geom_polygon(aes(fill = count)) + coord_quickmap() + 
+            labs(
+                title = "Count of Fatal Police Shootings by US State"
+            )
+    })
     
 }
-
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     titlePanel("Police Shootings in the USA Data"),
+
     
     sidebarLayout(
         sidebarPanel(
@@ -102,14 +130,16 @@ ui <- fluidPage(
                          c("Red", "Blue", "Gray", "Black"), 
                          selected = "Black"
             )
+           # selectInput("armed", "weapon", choices = unique(shoot_map$armed))
         ),
         mainPanel(
             plotOutput("race_bar"), 
-            textOutput("message")
+            textOutput("message"),
+            plotOutput("map")
             
         )
     )
 )
-
 # Run the application 
 shinyApp(ui = ui, server = server)
+
