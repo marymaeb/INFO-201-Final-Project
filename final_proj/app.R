@@ -72,6 +72,7 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
         title = "Count of Fatal Police Shootings by US State"
     )
 
+
 server <- function(input, output) {
     gender_name <- reactive({
         if(is.null(input$gender)) {
@@ -94,7 +95,13 @@ server <- function(input, output) {
         high_race <- by_race %>%
             filter(gender == input$gender) %>%
             arrange(desc(shootings))
-        paste0(high_race$race[1] , input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ")
+        paste0("The race" ,  high_race$race[1]  ,  "and the gender"  ,  input$gender , " have the highest amount of fatal police shootings with ", high_race$shootings[1], " shootings. ") 
+
+    })
+    
+    output$descripation_one <- renderText({
+        print("This bar graph helps us look at the disparities of fatal police shootings among race. The user 
+          can then adjust it to further look at the differences between different races and different genders.")
     })
     
     output$map <- renderPlot({
@@ -108,12 +115,17 @@ server <- function(input, output) {
     })
     
 }
+output$mannerBar <- renderPlot({
+    subset<- data %>%
+        filter(gender %in% input$gender)
+    ggplot(data= subset, aes(x= manner_of_death, fill= ))+ 
+        geom_bar() + labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
+})
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     titlePanel("Police Shootings in the USA Data"),
 
-    
     sidebarLayout(
         sidebarPanel(
             uiOutput("gender"), 
@@ -129,11 +141,33 @@ ui <- fluidPage(
         mainPanel(
             plotOutput("race_bar"), 
             textOutput("message"),
+            textOutput("descripation_one"),
             plotOutput("map")
             
         )
     )
 )
+# Application title
+titlePanel("Manner of Death")
+
+# Sidebar with a slider input for number of bins 
+sidebarLayout(
+    sidebarPanel(
+        selectInput("gender","gender", 
+                    label= "Select Gender",
+                    choices = list("Female"= "F",
+                                   "Male"= "M")),
+        radioButtons(inputId = "Color", label = "Plot Color", 
+                     c("Red"), 
+                     selected = "Red")),
+    
+    
+    
+    # Show a plot of the generated distribution
+    mainPanel(
+        plotOutput("mannerBar")
+    )
+)
+
 # Run the application 
 shinyApp(ui = ui, server = server)
-
