@@ -112,7 +112,13 @@ manner_death <- data %>%
 
 server <- function(input, output) {
 ##########Addintropage stuff
-    
+    output$intro <- renderText({
+      print("Our Data is collected by the Washington Post and accounts for every 
+      fatal police shooting since Jan 1st 2015 to June 1st 2020. We found this located
+      on the Kaggle website and decided that this is what we wanted to focus on 
+      energy on for the final project. This data can allow us to look at patterns 
+      among fatal police shootings in the US and analysis thouse.")
+    })
 #################Mary-MaePage
     gender_name <- reactive({
         if(is.null(input$gender)) {
@@ -186,7 +192,7 @@ server <- function(input, output) {
 ###################End Ashley Page
  #############conclusion
     output$conclusion <- renderText({
-      #  print("Throughout our project we looked at a lot of different aspects of this data. 
+      # print("Throughout our project we looked at a lot of different aspects of this data. 
              # To start, we look at the shooting counts among the different states. We found that ", shoot_count_high$Abbreviation[1], 
            #         " had the highest total shoot count with ", shoot_count_high$count[1], " fatal police shootings.
                  #  We allow the user to switch between different things the person was armed (or not armed with) this showed a pattern that 
@@ -199,9 +205,9 @@ server <- function(input, output) {
               states in the south had higher proportions of mentally ill individuals who were victimized, while states in the north had 
               a smaller proportion. This evidence suggests that there is a disproportionate approach as to how US policing systems issue order
               when confronting an individual with a mental illness. This suggests that nationwide training should be instilled in police forces
-              to detail how to respond to calls involving mentally ill individuals. It is then that we can hope to reduce these numbers.") 
+              to detail how to respond to calls involving mentally ill individuals. It is then that we can hope to reduce these numbers.")
               br()
-              print("In our next page, we showed a bar graph that showed the number of fatal shootings spiliting up by race. This showed us that in this data, the most people
+              paste0("In our next page, we showed a bar graph that showed the number of fatal shootings spiliting up by race. This showed us that in this data, the most people
               being shot were the ", by_race_high$race[1], " race and ", by_race_high$gender[1], " gender with ", by_race_high$shootings[1],
                     " shootings. This number is closely followed by Black Males with ", by_race_high$shootings[2], " shootings. This shows us
               that Males are being shot more than females and in this particular data White Males more than Blakc Males. In our last page we
@@ -227,7 +233,12 @@ server <- function(input, output) {
 ui <- fluidPage(
     tabsetPanel(type = "tabs", 
             ##Intro Page
-            tabPanel("Introduction"),
+            tabPanel("Introduction",
+                    h2("Introduction"),
+                    mainPanel(
+                      textOutput("intro")
+                    )
+            ),
             
             ##AMy Page
             tabPanel("Tab 2",
@@ -284,7 +295,7 @@ ui <- fluidPage(
                     tabPanel("Conclusion",
                             h2("Conclusion"), 
                         mainPanel(
-                            textOutput("Conclusion")
+                            textOutput("conclusion")
                         )    
                              )
 )
