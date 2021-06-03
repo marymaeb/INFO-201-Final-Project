@@ -172,9 +172,9 @@ server <- function(input, output) {
     
     name_gender <- reactive({
         if(is.null(input$gender)) {
-            by_race
+            manner_death
         }  else {
-            by_race %>%
+            manner_death %>%
                 filter(gender %in% input$gender) 
         }
     }) 
