@@ -179,8 +179,8 @@ server <- function(input, output) {
         }
     }) 
     output$mannerBar <- renderPlot({
-        ggplot(name_gender(), aes(x= manner_of_death, occurances ))+ 
-            geom_bar(col = "Red")+
+        ggplot(name_gender(), aes(manner_of_death, occurances ))+ 
+            geom_col(col = "Red")+
             labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
     })
 ###################End Ashley Page
