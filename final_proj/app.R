@@ -130,7 +130,7 @@ server <- function(input, output) {
             have the ability to be the jury, judge and executioner of US citzens? Should police being
             killing people they vow to protect? Looking at this data we can find patterns and see
             if the people being shot are putting the police in danger and demographic wise who is being shot
-            most.")
+            most. Using this data we can start answering those bigger questions such as; are these shootings justified?")
     })
 #################Mary-MaePage
     gender_name <- reactive({
@@ -262,7 +262,7 @@ ui <- fluidPage(
             ),
             
             ##AMy Page
-            tabPanel("Tab 2",
+            tabPanel("Fatal Shootings among Mentally Ill",
                      h2("Map of Mentally-Ill Victims"),
                      mainPanel(
                          plotOutput("map"),
@@ -271,7 +271,7 @@ ui <- fluidPage(
     ),
     
             ###Mary-Mae Page
-                tabPanel("Tab 3", 
+                tabPanel("Fatal Shootings by Race", 
                          h2("Victims by Race and Gender"),
                          sidebarLayout(
                              sidebarPanel(
@@ -292,7 +292,7 @@ ui <- fluidPage(
                 )
           ),
                 ####Ashley Page
-    tabPanel("Tab 4", 
+    tabPanel("Fatal Shootings by Manner of Death", 
              h2("Victim Manner of Death by Race"),
             sidebarLayout(
                 sidebarPanel(
