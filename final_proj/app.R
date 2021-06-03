@@ -206,42 +206,42 @@ server <- function(input, output) {
     })
 ###################End Ashley Page
  #############conclusion
-    output$conclusion <- renderText({
-      # print("Throughout our project we looked at a lot of different aspects of this data. 
-             # To start, we look at the shooting counts among the different states. We found that ", shoot_count_high$Abbreviation[1], 
-           #         " had the highest total shoot count with ", shoot_count_high$count[1], " fatal police shootings.
-                 #  We allow the user to switch between different things the person was armed (or not armed with) this showed a pattern that 
-                  # a high majority of people who were shot were actually not armed. This number is alarming with ", armed_count$count[3], 
-                  # " people being unarmed while they were fatally shot by the police. This shows that many police error on the side of caution
-                 #  and fear when shooting at citzens, which can be very problematic when it entails taking a human life.")
-              print("Throughout our project, we aimed to examine aspects of the data that would provide insight to the characteristics 
+    output$conclusion1 <- renderText({
+      paste0("Throughout our project, we aimed to examine aspects of the data that would provide insight to the characteristics 
         of the victims of police shootings. The first panel displays a USmap which is colored according to the proportion of individuals 
               who were fatally shot by policemen and were mentally ill (out of all individuals shot). This map gave evidence to suggest 
               states in the south had higher proportions of mentally ill individuals who were victimized, while states in the north had 
               a smaller proportion. This evidence suggests that there is a disproportionate approach as to how US policing systems issue order
               when confronting an individual with a mental illness. This suggests that nationwide training should be instilled in police forces
               to detail how to respond to calls involving mentally ill individuals. It is then that we can hope to reduce these numbers.")
-              br()
-              paste0("In our next page, we showed a bar graph that showed the number of fatal shootings spiliting up by race. This showed us that in this data, the most people
+      
+    })
+    output$conclusion2 <- renderText({
+      paste0("In our next page, we showed a bar graph that showed the number of fatal shootings spiliting up by race. This showed us that in this data, the most people
               being shot were the ", by_race_high$race[1], " race and ", by_race_high$gender[1], " gender with ", by_race_high$shootings[1],
-                    " shootings. This number is closely followed by Black Males with ", by_race_high$shootings[2], " shootings. This shows us
+             " shootings. This number is closely followed by Black Males with ", by_race_high$shootings[2], " shootings. This shows us
               that Males are being shot more than females and in this particular data White Males more than Blakc Males. In our last page we
               created a bar graph that depicted that manner of death.")
-              
-              br()
-              print("ADD ASHLEY DATA!!!! All of this data is very important because it allows us to investigate the Police force and think about the manner of fatal shootings. Are they always justified? With these 
+    })
+    output$conclusion3 <- renderText({
+      paste0("All of this data is very important because it allows us to investigate the Police force and think about the manner of fatal shootings. Are they always justified? With these 
               numbers we can see that although more people are armed than unarmed, there is still an alarming number of unarmed 
               individuals being shot. Furthermore we can start investigating deeper questions such as, who gets to decides if a person 
               lives or dies? Should the Police person have the ability to be the judge, jury and executor?")
-              br()
-              print("This data as a whole we believe was fairly unbiased. It was giving numbers and statistics which were not pulled out of thin air. The major issue that we had with this 
-              data is that there were many catergories that did not have a variable in the box, like empty parts in the data. This made it 
-              a little more diffcult when we constructed charts.")
-              br()
-              print("What's next with this project? Investigate another data set that shows 
-              fatal Police shooting but during a different time period. We could compare and contrast the data and look how fatal Police shootings
-              have changed over time." )
     })
+    output$conclusion4 <- renderText({
+      paste0("This data as a whole we believe was fairly unbiased. It was giving numbers and statistics which were not pulled out of thin air. The major issue that we had with this 
+              data is that there were many catergories that did not have a variable in the box, like empty parts in the data. This made it 
+              a little more diffcult when we constructed charts.
+             ")
+    })
+    output$conclusion5 <- renderText({
+      paste0("What's next with this project? Investigate another data set that shows 
+              fatal Police shooting but during a different time period. We could compare and contrast the data and look how fatal Police shootings
+              have changed over time.")
+    })
+     
+    
        
 }
 # Define UI for application that draws a histogram
@@ -257,7 +257,7 @@ ui <- fluidPage(
             
             ##AMy Page
             tabPanel("Tab 2",
-                     h2("Amy Page"),
+                     h2("Map of Mentally-Ill Victims"),
                      mainPanel(
                          plotOutput("map"),
                          textOutput("map_descript")
@@ -266,7 +266,7 @@ ui <- fluidPage(
     
             ###Mary-Mae Page
                 tabPanel("Tab 3", 
-                         h2("Mary-Mae Page"),
+                         h2("Victims by Race and Gender"),
                          sidebarLayout(
                              sidebarPanel(
                                  selectInput(inputId = "gender", "Select Gender:", 
@@ -287,7 +287,7 @@ ui <- fluidPage(
           ),
                 ####Ashley Page
     tabPanel("Tab 4", 
-             h2("Ashley Page"),
+             h2("Victim Manner of Death by Race"),
             sidebarLayout(
                 sidebarPanel(
                     selectInput(inputId = "race", "Select Race:", 
@@ -311,10 +311,15 @@ ui <- fluidPage(
                     tabPanel("Conclusion",
                             h2("Conclusion"), 
                         mainPanel(
-                            textOutput("conclusion")
+                            textOutput("conclusion1"),
+                            textOutput("conclusion2"),
+                            textOutput("conclusion3"),
+                            textOutput("conclusion4"),
+                            textOutput("conclusion5")
                         )    
                              )
 )
 )
 
 shinyApp(ui = ui , server = server)
+
