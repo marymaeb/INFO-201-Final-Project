@@ -7,16 +7,22 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(tidyverse)
-library(maps)
+library(shiny, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2, warn.conflicts = FALSE)
+library(tidyverse, warn.conflicts = FALSE)
+library(maps, warn.conflicts = FALSE)
+library(rsconnect, warn.conflicts = FALSE)
+
 
 data <- read.csv("fatal-police-shootings-data.csv")
-by_race <- data %>%
-    group_by(race, gender) %>%
+by_race_counts <- data %>%
+    group_by(race) %>%
     summarise(shootings = n()) 
+by_race <- left_join(data, by_race_counts, by = "race")
+
+
+shoot_map_data <- left_join(shoot_map_data, fips_data, by = c("state" = "state_abbr"))
 
 ##find highest count by race
   by_race_high <-  by_race %>%
@@ -177,8 +183,8 @@ server <- function(input, output) {
             with a darker purple The plot suggests that states with the highest proportions of mentally ill 
             victims of police shootings were Wyoming, South Dakota, and Vermont. The states with the lowest
             proportions were Kentucky, Maine, and Montana. Overall, the map suggests that states in the 
-            southern parts of the US have higher proportions of mentally ill individuals shot by policemen
-            than northern states.")
+            northern parts of the US have higher proportions of mentally ill individuals shot by policemen
+            than southern states.")
     })
 ###################End Amy Page
     ##################AshleyPage
@@ -210,7 +216,7 @@ server <- function(input, output) {
       paste0("Throughout our project, we aimed to examine aspects of the data that would provide insight to the characteristics 
         of the victims of police shootings. The first panel displays a USmap which is colored according to the proportion of individuals 
               who were fatally shot by policemen and were mentally ill (out of all individuals shot). This map gave evidence to suggest 
-              states in the south had higher proportions of mentally ill individuals who were victimized, while states in the north had 
+              states in the north had higher proportions of mentally ill individuals who were victimized, while states in the south had 
               a smaller proportion. This evidence suggests that there is a disproportionate approach as to how US policing systems issue order
               when confronting an individual with a mental illness. This suggests that nationwide training should be instilled in police forces
               to detail how to respond to calls involving mentally ill individuals. It is then that we can hope to reduce these numbers.")
