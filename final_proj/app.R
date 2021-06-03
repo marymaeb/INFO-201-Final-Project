@@ -172,9 +172,23 @@ server <- function(input, output) {
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-    ##Mary-maepage
-    titlePanel("Police Shootings in the USA Data"),
-
+    tabsetPanel(type = "tabs",
+                
+                ####INTRO PAGE TAB
+                tabPanel("Introduction"), 
+                
+                #####AMY TAB --add your sidebar & Main Panel  
+                tabPanel("Tab 2", 
+                         h2("Amy Page")
+                ), 
+                # selectInput("armed", "weapon", choices = unique(shoot_map$armed))
+                mainPanel(
+                    plotOutput("map")
+                ),
+                tabPanel("Tab 2",
+                         h2("Mary-Mae Page") 
+                )
+    ),
     sidebarLayout(
         sidebarPanel(
             uiOutput("gender"), 
@@ -184,31 +198,42 @@ ui <- fluidPage(
             radioButtons(inputId = "Color", label = "Select Bar Color", 
                          c("Red", "Blue", "Gray", "Black"), 
                          selected = "Black"
-            ), 
-           # selectInput("armed", "weapon", choices = unique(shoot_map$armed))
-           ##Ashleypage
-           selectInput("gender","gender", 
-                       label= "Select Gender",
-                       choices = list("Female"= "F",
-                                      "Male"= "M")),
-           radioButtons(inputId = "Color", label = "Plot Color", 
-                        c("Red"), 
-                        selected = "Red")),
+            ) 
         ),
         mainPanel(
-            ##Mary-maespage
             plotOutput("race_bar"), 
             textOutput("message"),
-            textOutput("descripation_one"),
-            ##Amypage
-            plotOutput("map"),
-            ##Conclusion
-            textOutput("conclusion"), 
-            ##Ashleypage
+            textOutput("descripation_one")
+        )),
+    
+    
+    tabPanel("Tab 4",
+             h2("Ashley Page")
+    ),
+    sidebarLayout(
+        sidebarPanel(
+            uiOutput("gender"), 
+            selectInput(inputId = "gender", "Select Gender:", 
+                        c("Female" = "F", 
+                          "Male" = "M")), 
+            radioButtons(inputId = "Color", label = "Plot Color", 
+                         c("Red"), 
+                         selected = "Red"
+            )
+        ),
+        mainPanel(
             plotOutput("mannerBar")
-            
+        ),
+        
+        
+        tabPanel("Tab 5 final",
+                 h2("Conclusion")
+        ),
+        mainPanel(
+            textOutput("conclusion")
         )
+    
 )
-
-# Run the application 
-shinyApp(ui = ui, server = server)
+)
+          
+shinyApp(ui = ui , server = server)
