@@ -107,7 +107,7 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
 
 ###Group by Manner of death
 manner_death <- data %>%
-    group_by(manner_of_death, gender) %>%
+    group_by(manner_of_death, race) %>%
     summarise(occurances = n())
 
 server <- function(input, output) {
@@ -170,16 +170,16 @@ server <- function(input, output) {
 ###################End Amy Page
     ##################AshleyPage
     
-    name_gender <- reactive({
-        if(is.null(input$gender)) {
+    race_name <- reactive({
+        if(is.null(input$race)) {
             manner_death
         }  else {
             manner_death %>%
-                filter(gender %in% input$gender) 
+                filter(race %in% input$race) 
         }
     }) 
     output$mannerBar <- renderPlot({
-        ggplot(name_gender(), aes(manner_of_death, occurances ))+ 
+        ggplot(race_name(), aes(manner_of_death, occurances ))+ 
             geom_col(col = "Red")+
             labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
     })
@@ -264,9 +264,13 @@ ui <- fluidPage(
              h2("Ashley Page"),
             sidebarLayout(
                 sidebarPanel(
-                    selectInput(inputId = "gender", "Select Gender:", 
-                                 c("Female" = "F", 
-                                   "Male" = "M")) 
+                    selectInput(inputId = "race", "Select Race:", 
+                                 c("Black" = "B", 
+                                   "White" = "W",
+                                   "Asian" = "A", 
+                                   "Other" = "O", 
+                                   "Hispanic" = "H", 
+                                   "Native American" = "N")) 
                      
                  ),
                 mainPanel(
