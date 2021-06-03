@@ -115,9 +115,16 @@ server <- function(input, output) {
     output$intro <- renderText({
       print("Our Data is collected by the Washington Post and accounts for every 
       fatal police shooting since Jan 1st 2015 to June 1st 2020. We found this located
-      on the Kaggle website and decided that this is what we wanted to focus on 
+      on the Kaggle website (https://www.kaggle.com/andrewmvd/police-deadly-force-usage-us/metadata) 
+      and decided that this is what we wanted to focus on 
       energy on for the final project. This data can allow us to look at patterns 
-      among fatal police shootings in the US and analysis thouse.")
+      among fatal police shootings in the US and analysis thouse. This is important as, especially in the last couple
+            of years, the amount of fatal police shootings have been surronding the media. This
+            topic is one people should be paying attention to as we question: Should police 
+            have the ability to be the jury, judge and executioner of US citzens? Should police being
+            killing people they vow to protect? Looking at this data we can find patterns and see
+            if the people being shot are putting the police in danger and demographic wise who is being shot
+            most.")
     })
 #################Mary-MaePage
     gender_name <- reactive({
