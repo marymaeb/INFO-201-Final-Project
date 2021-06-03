@@ -209,7 +209,7 @@ server <- function(input, output) {
               have changed over time." )
     })
        
-
+}
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     tabsetPanel(type = "tabs", 
@@ -278,4 +278,3 @@ ui <- fluidPage(
 )
 
 shinyApp(ui = ui , server = server)
-
