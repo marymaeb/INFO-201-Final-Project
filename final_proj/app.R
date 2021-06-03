@@ -105,6 +105,11 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
         title = "Count of Fatal Police Shootings by US State"
     )
 
+###Group by Manner of death
+manner_death <- data %>%
+    group_by(manner_of_death, gender) %>%
+    summarise(occurances = n())
+
 server <- function(input, output) {
 ##########Addintropage stuff
     
@@ -164,11 +169,19 @@ server <- function(input, output) {
     })
 ###################End Amy Page
     ##################AshleyPage
+    
+    name_gender <- reactive({
+        if(is.null(input$gender)) {
+            by_race
+        }  else {
+            by_race %>%
+                filter(gender %in% input$gender) 
+        }
+    }) 
     output$mannerBar <- renderPlot({
-        subset<- data %>%
-            filter(gender %in% input$gender)
-        ggplot(data= subset, aes(x= manner_of_death, fill= ))+ 
-            geom_bar() + labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
+        ggplot(name_gender(), aes(x= manner_of_death, occurances ))+ 
+            geom_bar(col = "Red")+
+            labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
     })
 ###################End Ashley Page
  #############conclusion
@@ -248,25 +261,23 @@ ui <- fluidPage(
                 )
           ),
                 ####Ashley Page
-               ## tabPanel("Tab 4", 
-                    ##     h2("Ashley Page"), 
-                      ##   sidebarLayout(
-                       ##      sidebarPanel(
-                              ##   uiOutput("gender"), 
-                               ##  selectInput(inputId = "gender", "Select Gender:", 
-                                          ##   c("Female" = "F", 
-                                             ##  "Male" = "M")), 
-                                ## radioButtons(inputId = "Color", label = "Select Bar Color", 
-                                            ##  c("Red", "Blue", "Gray", "Black"), 
-                                             ## selected = "Black"
-                         ##    )
-                       ##  )
-                    
-             ##   ),
-             ##   mainPanel(
-                  ##  textOutput("mannerBar")
-             ##   )
-       ##  ),
+    tabPanel("Tab 4", 
+             h2("Ashley Page"),
+            sidebarLayout(
+                sidebarPanel(
+                     uiOutput("gender"), 
+                    selectInput(inputId = "gender", "Select Gender:", 
+                                 c("Female" = "F", 
+                                   "Male" = "M")), 
+                     
+                 ),
+                mainPanel(
+                     plotOutput("mannerBar")
+                     
+                 )
+             )
+    ),
+                
                 #####Conclusion
                     tabPanel("Conclusion",
                             h2("Conclusion"), 
