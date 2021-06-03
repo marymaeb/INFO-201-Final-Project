@@ -83,7 +83,7 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
 server <- function(input, output) {
 ##########Addintropage stuff
     
-#####Mary-MaePage
+#################Mary-MaePage
     gender_name <- reactive({
         if(is.null(input$gender)) {
             by_race
@@ -116,7 +116,7 @@ server <- function(input, output) {
               understand and look at the patterns of who is being fatally shot most by police.")
     })
 ##################End Mary-Mae Page
- ##AmyPage
+ ###################AmyPage
     output$map <- renderPlot({
         #subset <- shoot_map %>% 
             #filter(count)
@@ -128,7 +128,7 @@ server <- function(input, output) {
         
     })
 ###################End Amy Page
-    ##AshleyPage
+    ##################AshleyPage
     output$mannerBar <- renderPlot({
         subset<- data %>%
             filter(gender %in% input$gender)
@@ -136,7 +136,7 @@ server <- function(input, output) {
             geom_bar() + labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
     })
 ###################End Ashley Page
-    ##conclusion
+ #############conclusion
     output$conclusion <- renderText({
         print("Throughout our project we looked at a lot of different aspects of this data. 
               To start, we look at the shooting counts among the different states. We found that ", shoot_count_high$Abbreviation[1], 
