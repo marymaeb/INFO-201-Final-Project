@@ -214,67 +214,69 @@ server <- function(input, output) {
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-    tabsetPanel(type = "tabs",
-                
-                ####INTRO PAGE TAB
-                tabPanel("Introduction"), 
-                
-                #####AMY TAB --add your sidebar & Main Panel  
-                tabPanel("Tab 2", 
-                         h2("Amy Page")
-                ), 
-                mainPanel(
-                    plotOutput("map"),
-                    textOutput("map_descript")
-                ),
-                tabPanel("Tab 2",
-                         h2("Mary-Mae Page") 
+    tabsetPanel(type = "tabs", 
+            ##Intro Page
+            tabPanel("Introduction"),
+            
+            ##AMy Page
+            tabPanel("Tab 2",
+                     h2("Amy Page"),
+                     mainPanel(
+                         plotOutput("map"),
+                         textOutput("map_descript")
+                     )
+    ),
+    
+            ###Mary-Mae Page
+                tabPanel("Tab 3", 
+                         h2("Mary-Mae Page"),
+                         sidebarLayout(
+                             sidebarPanel(
+                                 uiOutput("gender"), 
+                                 selectInput(inputId = "gender", "Select Gender:", 
+                                             c("Female" = "F", 
+                                               "Male" = "M")), 
+                                 radioButtons(inputId = "Color", label = "Select Bar Color", 
+                                              c("Red", "Blue", "Gray", "Black"), 
+                                              selected = "Black"
+                             )
+                         ),
+                            mainPanel(
+                                plotOutput("race_bar"), 
+                                textOutput("message"),
+                                textOutput("descripation_one")
+                                
+                            )
                 )
-    ),
-    sidebarLayout(
-        sidebarPanel(
-            uiOutput("gender"), 
-            selectInput(inputId = "gender", "Select Gender:", 
-                        c("Female" = "F", 
-                          "Male" = "M")), 
-            radioButtons(inputId = "Color", label = "Select Bar Color", 
-                         c("Red", "Blue", "Gray", "Black"), 
-                         selected = "Black"
-            ) 
-        ),
-        mainPanel(
-            plotOutput("race_bar"), 
-            textOutput("message"),
-            textOutput("descripation_one")
-        )),
-    
-    
-    tabPanel("Tab 4",
-             h2("Ashley Page")
-    ),
-    # sidebarLayout(
-    #     sidebarPanel(
-    #         uiOutput("gender"), 
-    #         selectInput(inputId = "gender", "Select Gender:", 
-    #                     c("Female" = "F", 
-    #                       "Male" = "M")), 
-    #         radioButtons(inputId = "Color", label = "Plot Color", 
-    #                      c("Red"), 
-    #                      selected = "Red")
-    #         ),
-        mainPanel(
-            plotOutput("mannerBar")
-        ),
-        
-        
-        tabPanel("Tab 5 final",
-                 h2("Conclusion")
-        ),
-        mainPanel(
-            textOutput("conclusion")
-        )
+          ),
+                ####Ashley Page
+               ## tabPanel("Tab 4", 
+                    ##     h2("Ashley Page"), 
+                      ##   sidebarLayout(
+                       ##      sidebarPanel(
+                              ##   uiOutput("gender"), 
+                               ##  selectInput(inputId = "gender", "Select Gender:", 
+                                          ##   c("Female" = "F", 
+                                             ##  "Male" = "M")), 
+                                ## radioButtons(inputId = "Color", label = "Select Bar Color", 
+                                            ##  c("Red", "Blue", "Gray", "Black"), 
+                                             ## selected = "Black"
+                         ##    )
+                       ##  )
+                    
+             ##   ),
+             ##   mainPanel(
+                  ##  textOutput("mannerBar")
+             ##   )
+       ##  ),
+                #####Conclusion
+                    tabPanel("Conclusion",
+                            h2("Conclusion"), 
+                        mainPanel(
+                            textOutput("Conclusion")
+                        )    
+                             )
 )
-
-          
+)
 shinyApp(ui = ui , server = server)
 
