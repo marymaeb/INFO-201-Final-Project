@@ -189,6 +189,14 @@ server <- function(input, output) {
             geom_col(col = "Red")+
             labs(title= "Manner of Death Bar Graph", x= "Manner of Death", y= "Occurrances")
     })
+    
+    output$mannercomment <- renderText({
+      high_gender <- manner_death %>%
+        filter(race == input$race) %>%
+        arrange(desc(occurances))
+      paste0("The race ",  input$race , " had ", high_gender$occurances[1]  ," ",  high_gender$manner_of_death[1] , " vs ", high_gender$occurances[2]  , " ",  high_gender$manner_of_death[2]) 
+      
+    })
 ###################End Ashley Page
  #############conclusion
     output$conclusion <- renderText({
@@ -285,7 +293,8 @@ ui <- fluidPage(
                      
                  ),
                 mainPanel(
-                     plotOutput("mannerBar")
+                     plotOutput("mannerBar"),
+                     textOutput("mannercomment")
                      
                  )
              )
