@@ -243,7 +243,6 @@ ui <- fluidPage(
                          h2("Mary-Mae Page"),
                          sidebarLayout(
                              sidebarPanel(
-                                 uiOutput("gender"), 
                                  selectInput(inputId = "gender", "Select Gender:", 
                                              c("Female" = "F", 
                                                "Male" = "M")), 
@@ -265,10 +264,9 @@ ui <- fluidPage(
              h2("Ashley Page"),
             sidebarLayout(
                 sidebarPanel(
-                     uiOutput("gender"), 
                     selectInput(inputId = "gender", "Select Gender:", 
                                  c("Female" = "F", 
-                                   "Male" = "M")), 
+                                   "Male" = "M")) 
                      
                  ),
                 mainPanel(
