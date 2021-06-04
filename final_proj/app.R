@@ -15,16 +15,11 @@ library(maps, warn.conflicts = FALSE)
 library(rsconnect, warn.conflicts = FALSE)
 
 
-data <- read.csv("fatal-police-shootings-data.csv")
+data <- read.csv("fatal-police-shootings-data.csv.bz2")
 
-subset(data, select = - 
-         c(name,date,age, threat_level,flee, body_camera,city ))
-
-by_race_counts <- data %>%
-    group_by(race) %>%
+by_race <- data %>%
+    group_by(race, gender) %>%
     summarise(shootings = n()) 
-by_race <- left_join(data, by_race_counts, by = "race")
-
 
 shoot_map_data <- left_join(shoot_map_data, fips_data, by = c("state" = "state_abbr"))
 
