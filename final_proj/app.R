@@ -16,6 +16,10 @@ library(rsconnect, warn.conflicts = FALSE)
 
 
 data <- read.csv("fatal-police-shootings-data.csv")
+
+subset(data, select = - 
+         c(name,date,age, threat_level,flee, body_camera ))
+
 by_race_counts <- data %>%
     group_by(race) %>%
     summarise(shootings = n()) 
