@@ -87,6 +87,8 @@ prop_ill_dat <- shoot_map %>%
   group_by(Abbreviation) %>% 
   mutate(prop_true = (true_count / state_count) * 100,
          prop_false = (false_count / state_count) * 100)
+prop_ill_map <- prop_ill_dat %>% 
+  select(prop_true, prop_false, long, lat, group, fips.x, fips.y)
 
 ## create counts of shootings by state 
 shoot_count <- shoot_map %>% 
@@ -109,6 +111,7 @@ shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
     labs(
         title = "Count of Fatal Police Shootings by US State"
     )
+
 
 ###Group by Manner of death
 manner_death <- data %>%
@@ -165,14 +168,23 @@ server <- function(input, output) {
     })
 ##################End Mary-Mae Page
  ###################AmyPage
-    output$map <- renderPlot({
-       # subset <- prop_ill_dat %>% 
-            #filter(armed %in% input$armed)
-        shoot_map_plot <- ggplot(prop_ill_dat, aes(long, lat, group = group)) +
-            geom_polygon(aes(fill = prop_true)) + coord_quickmap() + 
+    tf_select <- reactive({
+      prop_ill_map %>% 
+        select(input$x, long, lat, group)
+    })
+    
+     output$map <- renderPlot({
+    #   proportion <- input$x
+    #   selection <- prop_ill_map %>% 
+    #     select(proportion, long, lat, group)
+        
+        shoot_map_plot <- ggplot(tf_select(), aes(long, lat, group = group)) +
+            geom_polygon(aes(fill = input$x)) + coord_quickmap() + 
             labs(
                 title = "Proportion of Individuals Fatally Shot and Mentally-Ill, by State"
-            ) +  scale_fill_gradient2("Proportion of Total Shot")
+            ) +  
+          scale_fill_gradient2("Proportion of Total Shot") 
+          
         shoot_map_plot
     })
     
@@ -263,10 +275,18 @@ ui <- fluidPage(
             ##AMy Page
             tabPanel("Fatal Shootings among Mentally Ill",
                      h2("Map of Mentally-Ill Victims"),
-                     mainPanel(
+                     sidebarLayout(
+                       sidebarPanel(
+                         selectInput(inputId = "x", "Select proportion:",
+                                     c("Mentally-ill" = "prop_true",
+                                       "Not mentally-ill" = "prop_false"))
+                       ),
+                       mainPanel(
                          plotOutput("map"),
                          textOutput("map_descript")
+                       )
                      )
+                     
     ),
     
             ###Mary-Mae Page
