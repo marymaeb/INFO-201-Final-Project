@@ -164,7 +164,8 @@ server <- function(input, output) {
     output$descripation_one <- renderText({
         print("This bar graph helps us look at the disparities of fatal police shootings among race. The user 
           can then adjust it to further look at the differences between different races and different genders. This allows us to 
-              understand and look at the patterns of who is being fatally shot most by police.")
+              understand and look at the patterns of who is being fatally shot most by police. *The changing color plot
+              allows users with visual imparements to change to the color that works best for them.")
     })
 ##################End Mary-Mae Page
  ###################AmyPage
@@ -220,6 +221,15 @@ server <- function(input, output) {
         arrange(desc(occurances))
       paste0("The race ",  input$race , " had ", high_gender$occurances[1]  ," ",  high_gender$manner_of_death[1] , " vs ", high_gender$occurances[2]  , " ",  high_gender$manner_of_death[2]) 
       
+    })
+    
+    outpu$descripation <- renderText({
+      print("This chart allows us to look at the way in which the individuals were killed by the police. The 
+            options consit of being shot or being shot in tasered. This allows us to analyze the serverity of 
+            the murder as see the patterns in which peoeple are being killed point blank vs given that taser warning.
+            The user can then utlize the widget to change the race of the indivudial and compare how they numbers
+            for each category change by race. *The changing color plot
+              allows users with visual imparements to change to the color that works best for them.")
     })
 ###################End Ashley Page
  #############conclusion
@@ -326,7 +336,8 @@ ui <- fluidPage(
                  ),
                 mainPanel(
                      plotOutput("mannerBar"),
-                     textOutput("mannercomment")
+                     textOutput("mannercomment"), 
+                     textOutput("descripation")
                      
                  )
              )
