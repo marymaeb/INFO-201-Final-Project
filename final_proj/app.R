@@ -223,13 +223,12 @@ server <- function(input, output) {
       
     })
     
-    outpu$descripation <- renderText({
+    output$descripation <- renderText({
       print("This chart allows us to look at the way in which the individuals were killed by the police. The 
             options consit of being shot or being shot in tasered. This allows us to analyze the serverity of 
             the murder as see the patterns in which peoeple are being killed point blank vs given that taser warning.
             The user can then utlize the widget to change the race of the indivudial and compare how they numbers
-            for each category change by race. *The changing color plot
-              allows users with visual imparements to change to the color that works best for them.")
+            for each category change by race.")
     })
 ###################End Ashley Page
  #############conclusion
@@ -331,7 +330,7 @@ ui <- fluidPage(
                                    "Asian" = "A", 
                                    "Other" = "O", 
                                    "Hispanic" = "H", 
-                                   "Native American" = "N")) 
+                                   "Native American" = "N"))
                      
                  ),
                 mainPanel(
