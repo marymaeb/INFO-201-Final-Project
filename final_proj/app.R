@@ -175,14 +175,10 @@ server <- function(input, output) {
     })
     
      output$map <- renderPlot({
-    #   proportion <- input$x
-    #   selection <- prop_ill_map %>% 
-    #     select(proportion, long, lat, group)
-        
         shoot_map_plot <- ggplot(tf_select(), aes(long, lat, group = group)) +
-            geom_polygon(aes(fill = input$x)) + coord_quickmap() + 
+            geom_polygon(aes_string(fill = input$x)) + coord_quickmap() + 
             labs(
-                title = "Proportion of Individuals Fatally Shot and Mentally-Ill, by State"
+                title = "Proportion of Individuals Fatally Shot by Mental State, by State"
             ) +  
           scale_fill_gradient2("Proportion of Total Shot") 
           
@@ -190,13 +186,19 @@ server <- function(input, output) {
     })
     
     output$map_descript <- renderText({
-      print("This map plots the proportion of individuals fatally shot by police that were mentally ill. 
-            States colored in with a lighter shade of purple have higher proportions than states colored 
-            with a darker purple The plot suggests that states with the highest proportions of mentally ill 
+          paste("This map plots the proportion of individuals fatally shot by police based on the state of their 
+            mental health (mentally-ill or not mentally-ill).
+            States colored in with a darker shade of purple have higher proportions than states colored 
+            with a lighter shade. The widget allows the user to toggle between viewing the proportions of the total individuals 
+            shot that were mentally-ill, and the proportions of the total shot that were not mentally-ill. 
+            The plot suggests that states with the highest proportions of mentally ill 
             victims of police shootings were Wyoming, South Dakota, and Vermont. The states with the lowest
             proportions were Kentucky, Maine, and Montana. Overall, the map suggests that states in the 
             northern parts of the US have higher proportions of mentally ill individuals shot by policemen
-            than southern states.")
+            than southern states. A comparison of the maps allows us to discern that over all, the majority of individuals
+                being fatally shot by policement are not mentally-ill. In some states, such as Rhode Island, 100%
+                of the victims are not mentally-ill.")
+          
     })
 ###################End Amy Page
     ##################AshleyPage
@@ -238,7 +240,8 @@ server <- function(input, output) {
               who were fatally shot by policemen and were mentally ill (out of all individuals shot). This map gave evidence to suggest 
               states in the north had higher proportions of mentally ill individuals who were victimized, while states in the south had 
               a smaller proportion. This evidence suggests that there is a disproportionate approach as to how US policing systems issue order
-              when confronting an individual with a mental illness. This suggests that nationwide training should be instilled in police forces
+              when confronting an individual with a mental illness.
+              This suggests that nationwide training should be instilled in police forces
               to detail how to respond to calls involving mentally ill individuals. It is then that we can hope to reduce these numbers.")
       
     })
@@ -292,7 +295,7 @@ ui <- fluidPage(
                      h2("Map of Mentally-Ill Victims"),
                      sidebarLayout(
                        sidebarPanel(
-                         selectInput(inputId = "x", "Select proportion:",
+                         selectInput(inputId = "x", "Select mentally-ill or not mentally-ill:",
                                      c("Mentally-ill" = "prop_true",
                                        "Not mentally-ill" = "prop_false"))
                        ),
