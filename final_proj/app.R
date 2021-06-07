@@ -276,9 +276,17 @@ ui <- fluidPage(
             ##Intro Page
             tabPanel("Introduction",
                     h2("Introduction"),
-                    mainPanel(
-                      textOutput("intro")
-                    )
+                sidebarLayout(
+                  sidebarPanel(
+                    img(src = "img.jpg", height = 300, width = 250)
+                  ),
+                  mainPanel(
+                    textOutput("intro")
+                  ) 
+                )
+                 
+               
+                    
             ),
             
             ##AMy Page
