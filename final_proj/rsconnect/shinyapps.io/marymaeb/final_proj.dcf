@@ -5,9 +5,10 @@ account: marymaeb
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4223836
-bundleId: 4678594
+bundleId: 4688639
 url: https://marymaeb.shinyapps.io/final_proj/
-when: 1622827830.49878
-lastSyncTime: 1622827830.49881
+when: 1623084405.71966
+lastSyncTime: 1623084405.71967
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: www/.DS_Store
