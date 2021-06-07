@@ -16,6 +16,7 @@ library(rsconnect, warn.conflicts = FALSE)
 
 
 data <- read.csv("fatal-police-shootings-data.csv.bz2")
+# remove unnecessary variables
 data$id <- 
   data$name <- 
   data$date <- 
