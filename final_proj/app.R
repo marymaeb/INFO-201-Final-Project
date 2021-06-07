@@ -16,6 +16,16 @@ library(rsconnect, warn.conflicts = FALSE)
 
 
 data <- read.csv("fatal-police-shootings-data.csv.bz2")
+data$id <- 
+  data$name <- 
+  data$date <- 
+  data$armed <- 
+  data$age <- 
+  data$city <- 
+  data$threat_level <- 
+  data$flee <- 
+  data$body_camera <- 
+  NULL
 
 by_race <- data %>%
     group_by(race, gender) %>%
@@ -35,7 +45,7 @@ state_abb_data$State <- tolower(state_abb_data$State)
 
 ## manipulate data 
 shoot_map_data <- data %>% 
-    select(id, armed, state, signs_of_mental_illness)
+    select(state, signs_of_mental_illness)
 
 ##find highest shoot count 
 shoot_count_highest <- shoot_count %>%
@@ -60,12 +70,6 @@ shoot_map <- left_join(shoot_map, shoot_count, by = "Abbreviation")
 shoot_map <- shoot_map %>% 
     rename(
         state_count = count
-    )
-## attach armed counts to shooting map 
-shoot_map <- left_join(shoot_map, armed_count, by = "armed")
-shoot_map <- shoot_map %>% 
-    rename(
-        armed_count = count
     )
 
 prop_ill_true <- shoot_map %>% 
@@ -94,23 +98,6 @@ prop_ill_map <- prop_ill_dat %>%
 shoot_count <- shoot_map %>% 
     group_by(Abbreviation) %>% 
     summarize(count = n())
-armed_count <- shoot_map %>% 
-    group_by(armed) %>% 
-    summarize(count = n()) %>% arrange(desc(count))
-armed_top_ten <- armed_count[-4,]
-## reduce to top ten 
-armed_top_ten <- armed_top_ten[1:10, 1]
-armed_top_ten <- armed_top_ten$armed
-
-## filter shoot data to only these top ten armed 
-shoot_map <- shoot_map %>% filter(armed %in% armed_top_ten)
-
-## plot map 
-shoot_map_plot <- ggplot(shoot_map, aes(long, lat, group = group)) +
-    geom_polygon(aes(fill = count)) + coord_quickmap() + 
-    labs(
-        title = "Count of Fatal Police Shootings by US State"
-    )
 
 
 ###Group by Manner of death
